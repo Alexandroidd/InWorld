@@ -40,6 +40,9 @@ renderer.render(scene,camera);
 	light.position.set(0,250,0);
 	scene.add(light);
 
+	var ambientLight = new THREE.AmbientLight(0x111111);
+	scene.add(ambientLight);
+
 	var colorMine = new THREE.Color("rgb(255, 0, 0)");
 
 	// FLOOR
@@ -56,6 +59,33 @@ renderer.render(scene,camera);
 	floor.rotation.x = Math.PI / 2;
 	scene.add(floor);
 
+	// Goat Object
+	var goat = new THREE.Object3D();
+
+	// function makeObject(object){
+	// goat = object;
+	// scene.add(goat);
+	// }
+
+	
+
+	var objLoader = new THREE.OBJLoader();
+	objLoader.load('objs/goat.obj', function(object){
+		// var material = new THREE.MeshLambertMaterial({color:0xFF0000});
+		object.scale.y = object.scale.x = object.scale.z = 0.1;
+		object.traverse( function ( child ) {
+        if ( child instanceof THREE.Mesh )
+            child.material.color.setRGB (1, 0, 0);
+    });
+
+		scene.add(object);
+
+	});
+		
+		// object.position.y = -;
+		// scene.add(object);
+
+		
 	//render it
 	function animate(){
 		requestAnimationFrame(animate);
