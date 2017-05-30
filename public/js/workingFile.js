@@ -6,34 +6,92 @@ $(document).ready(function(){
 			position.y = 0;
 			position.z = 50;
 	
-//
 
+////////////////////////////
+// Functions that make /////
+// and check animal types //
+////////////////////////////
+
+
+// makes a goat
 function makeGoat() {
 		  	
-		  	goatLoader.load('objs/goat.obj', function(object){
-			// var material = new THREE.MeshLambertMaterial({color:0xFF0000});
-			object.scale.y = object.scale.x = object.scale.z = 0.1;
-			object.name = 'Goat';
-			object.id = 2;
-			
-			object.traverse( function ( child ) {
-	        if ( child instanceof THREE.Mesh )
-	            child.material.color.setRGB (1, 0, 0);
-	        	child.position.set(position.x, position.y, position.z);
-        	
-      
-    		});
-			scene.add(object);
-			position.x += 50;
-			// console.log(position);
-		  	});
-		 }
+  	goatLoader.load('objs/goat.obj', function(object){
+	// var material = new THREE.MeshLambertMaterial({color:0xFF0000});
+	object.scale.y = object.scale.x = object.scale.z = 0.1;
+	object.name = 'Goat';
+	object.id = 2;
+	
+	object.traverse( function ( child ) {
+    if ( child instanceof THREE.Mesh )
+        child.material.color.setRGB (1, 0, 0);
+    	child.position.set(position.x, position.y, position.z);
+	
+
+	});
+	scene.add(object);
+	position.x += 50;
+	position.z += 50;
+	// console.log(position);
+  	});
+ }
+
+// makes a rat
+function makeRat(saying) {
+	saying = saying;
+	var ratLoader = new THREE.OBJLoader();
+	ratLoader.load('objs/rat.obj', function(object){
+		object.scale.y = object.scale.x = object.scale.z = 1;
+		object.name = 'Rat';
+
+		object.traverse(function (child){
+			if(child instanceof THREE.Mesh)
+				child.material.color.setRGB(0,1,0);
+				child.position.set(-100, -2, 20);
+		});
+		scene.add(object);
+		makeText(saying);
+	});
+}
+
+// makes a rhino
+function makeRhino() {
+	var rhinoLoader = new THREE.OBJLoader();
+	rhinoLoader.load('objs/rhino.obj', function(object){
+		object.scale.y = object.scale.x = object.scale.z = 0.5;
+		object.name = 'Rhino';
+
+		object.traverse(function(child){
+			if(child instanceof THREE.Mesh)
+				child.material.color.setRGB(0,0,1);
+				child.position.set(-200, 10 , 40);
+		});
+		scene.add(object);
+	});
+}
 
 
+// checks which character to make
+function checkCharacter(character, text) {
+		  	character = character;
+		  	text = text;
 
+		  	switch(character) {
+		  		case 'Goat':
+			  		makeGoat();
+			  		break;
+			  	case 'Rat':
+			  		makeRat(text);
+			  		break;
+			  	case 'Rhino':
+			  		makeRhino();
+			  		break;
+			  	default:
+			  		console.log('no animals to make');
+		  	}
+		  }
 
-
-//
+// End of Animal make/check functions ////////////
 
 
 
@@ -50,13 +108,13 @@ function makeGoat() {
 		
 		var arr = [];
 		// this works
-		database.ref('/characters').orderByChild("character").equalTo('Goat').on("child_added", function(snapshot) {
+		database.ref('/characters').orderByChild("character").on("child_added", function(snapshot) {
 		  // console.log(snapshot.val());
 		  var names = snapshot.val();
-		  makeGoat();
+		  checkCharacter(names.character, names.saying);
 		  
-		  
-		  // console.log(names);
+		  console.log(names.character);   
+		  //<<<<---crucial use this!
 		  
 		});
 		
@@ -105,7 +163,7 @@ function init(){
 
 	// set a near white clear color (default is black)
 	renderer.setClearColor(0xeeeeee);
-	var effect = new THREE.StereoEffect(renderer);
+	// var effect = new THREE.StereoEffect(renderer);
 
 	// set renderer shadow
 	// renderer.shadowMap.enabled = true;
@@ -170,6 +228,9 @@ function init(){
 	});
 
 	theGoat = scene.getObjectByName('Goat');
+} // << --- end of init ---- >>
+
+
 	// console.log(theGoat);
 	
 
@@ -182,11 +243,13 @@ function init(){
 
 
 	// add text
+	function makeText(text){
+	text = text;
 	var canvas1 = document.createElement('canvas');
 	var context1 = canvas1.getContext('2d');
 	context1.font = 'Bold 40px Arial';
 	context1.fillStyle = 'rgba(255,0,0,0.95';
-	context1.fillText('Hello World!', 0, 50);
+	context1.fillText(text, 0, 50);
 
 	//canvas contents used as a texture
 	var texture1 = new THREE.Texture(canvas1);
@@ -246,6 +309,14 @@ function init(){
 // });
 
 
+
+/////////////////////
+// SAVE FOR LATER ///
+/////////////////////
+// database.ref('/characters').orderByChild("character").equalTo('Goat').on("child_added", function(snapshot) {
+// 		  // console.log(snapshot.val());
+// 		  var names = snapshot.val();
+// 		  makeGoat();
 
 
 
