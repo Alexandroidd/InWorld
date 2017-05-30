@@ -1,4 +1,80 @@
+$(document).ready(function(){
+	var database = firebase.database();
+	var goatLoader = new THREE.OBJLoader();
+	var position = new THREE.Vector3();
+			position.x = 50;
+			position.y = 0;
+			position.z = 50;
+	
+//
 
+function makeGoat() {
+		  	
+		  	goatLoader.load('objs/goat.obj', function(object){
+			// var material = new THREE.MeshLambertMaterial({color:0xFF0000});
+			object.scale.y = object.scale.x = object.scale.z = 0.1;
+			object.name = 'Goat';
+			object.id = 2;
+			
+			object.traverse( function ( child ) {
+	        if ( child instanceof THREE.Mesh )
+	            child.material.color.setRGB (1, 0, 0);
+	        	child.position.set(position.x, position.y, position.z);
+        	
+      
+    		});
+			scene.add(object);
+			position.x += 50;
+			// console.log(position);
+		  	});
+		 }
+
+
+
+
+
+//
+
+
+
+
+	function pullCharacters(){
+		// var lastCharacter = database.ref('/characters').length-1;
+
+		// return database.ref('/characters').once('value').then(function(snapshot) {
+		//   var name = snapshot.exportVal();
+
+		//   console.log(name);
+		// });
+		// position = ()
+		
+		var arr = [];
+		// this works
+		database.ref('/characters').orderByChild("character").equalTo('Goat').on("child_added", function(snapshot) {
+		  // console.log(snapshot.val());
+		  var names = snapshot.val();
+		  makeGoat();
+		  
+		  
+		  // console.log(names);
+		  
+		});
+		
+		
+
+
+
+	}
+
+
+
+
+	// Functions to Run //
+	pullCharacters();
+
+
+
+});
 
 //global
 var scene, camera, renderer, controls;
@@ -146,10 +222,8 @@ function init(){
 
 	
 
-var param = {
-		lastName:'Doe',
-		firstname: 'johnson'
-	};
+
+
 
 
 

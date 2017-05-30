@@ -1,7 +1,12 @@
+
+
 $(document).ready(function(){
 
 // firebase //
 var database = firebase.database();
+var character;
+var name;
+var saying;
 
 
 
@@ -20,9 +25,9 @@ function writeCharacter(name, character, saying) {
 
 	$('form').submit(function(event) {
 	// event.preventDefault();
-	var character = $('#character').val();
-	var name = $('#name').val();
-	var saying = $('#saying').val();
+	character = $('#character').val();
+	name = $('#name').val();
+	saying = $('#saying').val();
 
 	writeCharacter(name, character, saying);
 	console.log(name);
@@ -37,4 +42,6 @@ function writeCharacter(name, character, saying) {
 
 
 });
+
+
 

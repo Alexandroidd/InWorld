@@ -1,27 +1,36 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset=utf-8>
-		<title>My first three.js app</title>
-		<link rel="stylesheet" type="text/css" href="styles/styles.css">
-		<style>
-			body { margin: 0; }
-			canvas { width: 100%; height: 100% }
-		</style>
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-		<!-- <script src='js/controller.js'></script> -->
+<head>
+	<link rel="stylesheet" type="text/css" href="styles/styles.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src='js/controller.js'></script>
+  
+	<title></title>
+</head>
+<body>
 
-	</head>
-	<body>
 
-		<script src="js/three.min.js"></script>
-		<script src='public/js/three.js-master/examples/js/loaders/OBJLoader.js'></script>
-		<script src='public/js/three.js-master/examples/js/effects/StereoEffect.js'></script>
-		<script src='js/supporting/Detector.js'></script>
-		<script src='js/supporting/OrbitControls.js'></script>
-		<script src='js/workingFile.js'>
-			// Our Javascript will go here.
-		</script>
+<h1>Welcome to 3D Party People</h1>
+
+<form id='form' method="get" action="worldPage.html">>
+	<label>Select Your Character</label>
+	<select name="characters" id='character'>
+  		<option value="Goat">Goat</option>
+      <option value='Hippo'>Hippo</option>
+	</select><br><br>
+	<label>Choose A Name</label><br>
+	<textarea placeholder="Type your name here" id='name'></textarea><br><br>
+  <label>Choose A Saying</label><br>
+  <textarea placeholder='Type your saying here' id='saying'></textarea><br>
+  <input type='submit' value='Submit' id='submit'>
+
+</form>
+ 
+
+
+
+
+
 
 
 
@@ -44,5 +53,5 @@
   };
   firebase.initializeApp(config);
 </script>
-	</body>
+</body>
 </html>
