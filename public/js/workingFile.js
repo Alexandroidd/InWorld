@@ -39,6 +39,7 @@ function makeGoat() {
 // makes a rat
 function makeRat(saying) {
 	saying = saying;
+	var ratPosition;
 	var ratLoader = new THREE.OBJLoader();
 	ratLoader.load('objs/rat.obj', function(object){
 		object.scale.y = object.scale.x = object.scale.z = 1;
@@ -48,9 +49,11 @@ function makeRat(saying) {
 			if(child instanceof THREE.Mesh)
 				child.material.color.setRGB(0,1,0);
 				child.position.set(-100, -2, 20);
+				ratPosition = child.position;
 		});
+		
 		scene.add(object);
-		makeText(saying);
+		makeText(saying, ratPosition);
 	});
 }
 
@@ -95,17 +98,8 @@ function checkCharacter(character, text) {
 
 
 
-
+// gets player data from firebase to be used by functions //
 	function pullCharacters(){
-		// var lastCharacter = database.ref('/characters').length-1;
-
-		// return database.ref('/characters').once('value').then(function(snapshot) {
-		//   var name = snapshot.exportVal();
-
-		//   console.log(name);
-		// });
-		// position = ()
-		
 		var arr = [];
 		// this works
 		database.ref('/characters').orderByChild("character").on("child_added", function(snapshot) {
@@ -243,11 +237,12 @@ function init(){
 
 
 	// add text
-	function makeText(text){
+	function makeText(text, posit){
 	text = text;
+	posit = posit;
 	var canvas1 = document.createElement('canvas');
 	var context1 = canvas1.getContext('2d');
-	context1.font = 'Bold 40px Arial';
+	context1.font = 'Bold 20px Arial';
 	context1.fillStyle = 'rgba(255,0,0,0.95';
 	context1.fillText(text, 0, 50);
 
@@ -264,7 +259,7 @@ function init(){
 			canvas1.width,
 			canvas1.height), material1);
 
-	mesh1.position.set(0,50,0);
+	mesh1.position.set(posit.x,posit.y+20,posit.z);
 	scene.add(mesh1);
 }
 
@@ -320,7 +315,14 @@ function init(){
 
 
 
+// var lastCharacter = database.ref('/characters').length-1;
 
+		// return database.ref('/characters').once('value').then(function(snapshot) {
+		//   var name = snapshot.exportVal();
+
+		//   console.log(name);
+		// });
+		// position = ()
 
 
 
