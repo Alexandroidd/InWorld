@@ -1,10 +1,29 @@
 $(document).ready(function(){
 	var database = firebase.database();
-	var goatLoader = new THREE.OBJLoader();
-	var position = new THREE.Vector3();
-			position.x = 50;
-			position.y = 0;
-			position.z = 50;
+
+
+//////////////////////////////
+// Seperate positioning for //
+// different animal types ////
+//////////////////////////////
+	
+	// Goat
+	var goatPosition = new THREE.Vector3();
+		goatPosition.x = 0;
+		goatPosition.y = 0;
+		goatPosition.z = -50;
+		goatHeightAdd = 20;
+
+	var ratPosition = new THREE.Vector3();
+		ratPosition.x = -50;
+		ratPosition.y = -2;
+		ratPosition.z = 0;
+
+	var rhinoPosition = new THREE.Vector3();
+		rhinoPosition.x = 0;
+		rhinoPosition.y = 16;
+		rhinoPosition.z = 150;
+	
 	
 
 ////////////////////////////
@@ -14,8 +33,11 @@ $(document).ready(function(){
 
 
 // makes a goat
-function makeGoat() {
-		  	
+function makeGoat(saying, character) {
+	saying = saying;
+	character = character;
+	var goatLoader = new THREE.OBJLoader();
+	
   	goatLoader.load('objs/goat.obj', function(object){
 	// var material = new THREE.MeshLambertMaterial({color:0xFF0000});
 	object.scale.y = object.scale.x = object.scale.z = 0.1;
@@ -25,21 +47,21 @@ function makeGoat() {
 	object.traverse( function ( child ) {
     if ( child instanceof THREE.Mesh )
         child.material.color.setRGB (1, 0, 0);
-    	child.position.set(position.x, position.y, position.z);
-	
+    	child.position.set(goatPosition.x, goatPosition.y, goatPosition.z);
+		// goatPosition = child.position;
 
 	});
 	scene.add(object);
-	position.x += 50;
-	position.z += 50;
-	// console.log(position);
+	makeText(saying, goatPosition, character);
+	goatPosition.z -= 50;
+	
   	});
  }
 
 // makes a rat
-function makeRat(saying) {
+function makeRat(saying, character) {
 	saying = saying;
-	var ratPosition;
+	character = character;
 	var ratLoader = new THREE.OBJLoader();
 	ratLoader.load('objs/rat.obj', function(object){
 		object.scale.y = object.scale.x = object.scale.z = 1;
@@ -48,28 +70,35 @@ function makeRat(saying) {
 		object.traverse(function (child){
 			if(child instanceof THREE.Mesh)
 				child.material.color.setRGB(0,1,0);
-				child.position.set(-100, -2, 20);
-				ratPosition = child.position;
+				child.position.set(ratPosition.x, ratPosition.y, ratPosition.z);
+				
 		});
 		
 		scene.add(object);
-		makeText(saying, ratPosition);
+		makeText(saying, ratPosition, character);
+		ratPosition.x -= 50;
 	});
 }
 
 // makes a rhino
-function makeRhino() {
+function makeRhino(saying, character) {
+	saying = saying;
+	character = character;
+	
 	var rhinoLoader = new THREE.OBJLoader();
 	rhinoLoader.load('objs/rhino.obj', function(object){
-		object.scale.y = object.scale.x = object.scale.z = 0.5;
+		object.scale.y = object.scale.x = object.scale.z = 2;
 		object.name = 'Rhino';
 
 		object.traverse(function(child){
 			if(child instanceof THREE.Mesh)
 				child.material.color.setRGB(0,0,1);
-				child.position.set(-200, 10 , 40);
+				child.position.set(rhinoPosition.x, rhinoPosition.y, rhinoPosition.z);
+				
 		});
 		scene.add(object);
+		makeText(saying, rhinoPosition, character);
+		rhinoPosition.z += 50;
 	});
 }
 
@@ -81,13 +110,13 @@ function checkCharacter(character, text) {
 
 		  	switch(character) {
 		  		case 'Goat':
-			  		makeGoat();
+			  		makeGoat(text, character);
 			  		break;
 			  	case 'Rat':
-			  		makeRat(text);
+			  		makeRat(text, character);
 			  		break;
 			  	case 'Rhino':
-			  		makeRhino();
+			  		makeRhino(text, character);
 			  		break;
 			  	default:
 			  		console.log('no animals to make');
@@ -179,7 +208,10 @@ function init(){
 	// LIGHT
 	var light = new THREE.PointLight(0xffffff);
 	light.position.set(0,250,0);
+	var light2 = new THREE.PointLight(0xffffff);
+	light2.position.set(0,300,400);
 	scene.add(light);
+	scene.add(light2);
 
 	var ambientLight = new THREE.AmbientLight(0x111111);
 	scene.add(ambientLight);
@@ -237,12 +269,17 @@ function init(){
 
 
 	// add text
-	function makeText(text, posit){
+	function makeText(text, posit, character){
+	character = character;
 	text = text;
 	posit = posit;
 	var canvas1 = document.createElement('canvas');
 	var context1 = canvas1.getContext('2d');
-	context1.font = 'Bold 20px Arial';
+
+	if(character == 'Rat'){
+		context1.font = 'Bold 15px Arial';
+	} else {context1.font = 'Bold 20px Arial';}
+
 	context1.fillStyle = 'rgba(255,0,0,0.95';
 	context1.fillText(text, 0, 50);
 
@@ -258,8 +295,14 @@ function init(){
 		new THREE.PlaneGeometry(
 			canvas1.width,
 			canvas1.height), material1);
-
-	mesh1.position.set(posit.x,posit.y+20,posit.z);
+	if (character == 'Goat'){
+		mesh1.position.set(posit.x+100,posit.y+50,posit.z);
+	} else if (character == 'Rhino'){
+		console.log('I am a ' + character);
+		mesh1.position.set(posit.x, posit.y+65, posit.z+100);
+	} else if (character == 'Rat'){
+		mesh1.position.set(posit.x+20, posit.y+30, posit.z);
+	}
 	scene.add(mesh1);
 }
 
