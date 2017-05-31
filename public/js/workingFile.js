@@ -166,7 +166,8 @@ function getMyCharacter(valueToChange){
 	firebase.database().ref('characters/' + lastItemKey).set({
     character: lastItem.character,
     name: lastItem.name,
-    saying: valueToChange
+    saying: valueToChange,
+    whatChanged: 'saying'
   });
 }
 
@@ -190,15 +191,60 @@ function getMyCharacter(valueToChange){
 	// console.log(scene.children);
 		database.ref('/characters').on('child_changed', function(snapshot){
 			var names = snapshot.val();
-			// console.log(names.name);
-			charName = names.name;
-			var objToDelete = scene.getObjectByName(charName);
-			scene.remove(objToDelete);
-			var objToDelete2 = scene.getObjectByName(charName + 'text');
-			scene.remove(objToDelete2);
+			var obj = scene.getObjectByName(names.name);
+			var objName = names.name +'text';
 
-		});
-	}
+			if(names.whatChanged == 'saying'){
+				var textToEdit = scene.getObjectByName(objName);
+				console.log(textToEdit);
+				scene.remove(textToEdit);
+				
+				var newCanvas = document.createElement('canvas');
+				var newContext = newCanvas.getContext('2d');
+
+				newContext.font = 'Bold 20px Arial';
+
+				newContext.fillStyle = 'rgba(255,0,0,0.95';
+				newContext.fillText(names.saying, 0, 50);
+
+				//canvas contents used as a texture
+				var newTexture = new THREE.Texture(newCanvas);
+				newTexture.needsUpdate = true;
+
+				var newMaterial = new THREE.MeshBasicMaterial(
+					{map: newTexture, side: THREE.DoubleSide});
+				newMaterial.transparent = true;
+
+				var newMesh = new THREE.Mesh(
+					new THREE.PlaneGeometry(
+						newCanvas.width,
+						newCanvas.height), newMaterial);
+
+				newMesh.position.set(obj.position.x+100, obj.position.y+50, obj.position.z);
+				newMesh.name = objName;
+
+				scene.add(newMesh);
+
+           		
+           		
+
+			// var prev = prevChild.val();
+			// console.log(names);
+			// console.log('this is prev ' + prev);
+			// console.log(names.name);
+			// charName = names.name;
+			// var objToDelete = scene.getObjectByName(charName);
+			// scene.remove(objToDelete);
+
+			// var textToEdit = scene.getObjectByName(charName + 'text');
+			// scene.remove(objToDelete2);
+			// checkCharacter(names.character, names.saying, names.name);
+
+		}
+	});
+}
+
+
 
 
 
@@ -234,7 +280,7 @@ function init(){
 	camera = new THREE.PerspectiveCamera(105, 
 		window.innerWidth/window.innerHeight,
 		0.1,
-		20000
+		30000
 	);
 
 	camera.position.set(0,150,400);
