@@ -10,33 +10,17 @@ $(document).ready(function(){
 
 
 
-function deleteCharacter(){
-		database.ref('/characters/').limitToLast(1).once('child_added', function(snapshot){
-		var objKey = snapshot.key;
-		let charToDelete = snapshot.val();
-		let charName = charToDelete.name;
-		var deleteObj = scene.getObjectByName(charName);
-		scene.remove(deleteObj);
-		var deleteText = scene.getObjectByName(charName + 'text');
-		scene.remove(deleteText);
-		console.log(objKey);
-		database.ref().child('/characters/' + objKey).remove();
-		// window.location.href = '../index.html';
-
-			
-
-
-	});
-	}
-	var controlla;
+	
+	
 
 	///////////////
 	// GUI MAKER //
 	///////////////
+	var controlla;
 	var gui = new dat.GUI();
 	var parameters = 
 	{
-		a: 200, //numeric
+		a: 'CONTROL YOUR PLAYER', //numeric
 		b: 200, //numeric slider
 		c: 'Hello, GUI', //string
 		d: false, // boolean (checkbox)
@@ -49,8 +33,7 @@ function deleteCharacter(){
 	};
 
 
-	gui.add(parameters, 'a').name('Number');
-	gui.add(parameters, 'b').min(128).max(256).step(16).name('Slider');
+	gui.add('Control Your Player');
 	controlla = gui.add(parameters, 'c').name('String');
 	gui.add(parameters, 'f').name('Delete Me');
 
@@ -131,7 +114,7 @@ function makeRat(saying, character, name) {
 		});
 		
 		scene.add(object);
-		makeText(saying, ratPosition, character);
+		makeText(saying, ratPosition, character, name);
 		ratPosition.x -= 50;
 	});
 }
@@ -154,7 +137,7 @@ function makeRhino(saying, character, name) {
 				
 		});
 		scene.add(object);
-		makeText(saying, rhinoPosition, character);
+		makeText(saying, rhinoPosition, character, name);
 		rhinoPosition.z += 50;
 	});
 }
@@ -199,7 +182,7 @@ function checkCharacter(character, text, name) {
 
 
 ///////////////////////////
-// NON THREE JS FUNCTION //
+// FIREBASE FUNCTIONS /////
 // DEFINITION SPACE ///////
 ///////////////////////////
 
@@ -226,8 +209,6 @@ function getMyCharacter(valueToChange){
 }
 
 
-
-
 // gets player data from firebase to be used by functions //
 	function pullCharacters(){
 		database.ref('/characters').orderByChild("character").on("child_added", function(snapshot) {
@@ -248,6 +229,7 @@ function getMyCharacter(valueToChange){
 			var obj = scene.getObjectByName(names.name);
 			var objName = names.name +'text';
 
+			// if you're changing the Saying
 			if(names.whatChanged == 'saying'){
 				var textToEdit = scene.getObjectByName(objName);
 				console.log(textToEdit);
@@ -275,43 +257,44 @@ function getMyCharacter(valueToChange){
 						newCanvas.height), newMaterial);
 				if(names.character == 'Rhino'){
 					newMesh.position.set(obj.position.x+100, obj.position.y+65, obj.position.z+100);
+					newMesh.name = objName;
 				} else if(names.character == 'Rat'){
 					newMesh.position.set(obj.position.x+20, obj.position.y+30, obj.position.z);
-				}
+					newMesh.name = objName;
+				} else if(names.character == 'Goat'){
 				newMesh.position.set(obj.position.x+100, obj.position.y+50, obj.position.z);
 				newMesh.name = objName;
-
+				}	
 				scene.add(newMesh);
+			} // << -- End of 'if' Saying -- >
 
-           		
-           		
-
-			// var prev = prevChild.val();
-			// console.log(names);
-			// console.log('this is prev ' + prev);
-			// console.log(names.name);
-			// charName = names.name;
-			// var objToDelete = scene.getObjectByName(charName);
-			// scene.remove(objToDelete);
-
-			// var textToEdit = scene.getObjectByName(charName + 'text');
-			// scene.remove(objToDelete2);
-			// checkCharacter(names.character, names.saying, names.name);
-
-			}
 		});
 	} // << -- End of Update Function -- >>
 
+// deletes user's character
+function deleteCharacter(){
+		database.ref('/characters/').limitToLast(1).once('child_added', function(snapshot){
+		var objKey = snapshot.key;
+		let charToDelete = snapshot.val();
+		let charName = charToDelete.name;
+		var deleteObj = scene.getObjectByName(charName);
+		scene.remove(deleteObj);
+		var deleteText = scene.getObjectByName(charName + 'text');
+		scene.remove(deleteText);
+		console.log(objKey);
+		database.ref().child('/characters/' + objKey).remove();
+		window.location.href = '../index.html';
+		});
+	}
 
 	
 
 
 
-/////////////////////////////
-/// NON THREE JS FUNCTIONS///
-/////// RUN SPACE ///////////
-/////////////////////////////
-
+///////////////////////////////////
+/// FIREBASE LISTENING FUNCTIONS///
+/////// RUN SPACE /////////////////
+///////////////////////////////////
 
 	pullCharacters();
 	updateCharacters();
@@ -487,14 +470,16 @@ function init(){
 			canvas1.height), material1);
 
 
-		mesh1.name = name + 'text';
 	if (character == 'Goat'){
 		mesh1.position.set(posit.x+100,posit.y+50,posit.z);
 	} else if (character == 'Rhino'){
 		mesh1.position.set(posit.x+100, posit.y+65, posit.z+100);
+		
 	} else if (character == 'Rat'){
 		mesh1.position.set(posit.x+20, posit.y+30, posit.z);
+
 	}
+	mesh1.name = name + 'text';
 	scene.add(mesh1);
 
 

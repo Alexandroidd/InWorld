@@ -1,4 +1,4 @@
-'use strict'
+
 
 const express			= require('express');
 const bodyParser		= require('body-parser');
@@ -17,11 +17,11 @@ app.use(bodyParser.json());
 app.use(express.static(__dirname + '/public'));
 
 
-// INDEX ROUTE //
-// router.route('/world')
-// .get( function getHome(req,res){
-// 	res.sendFile(__dirname + 'worldPage.html');
-// });
+//INDEX ROUTE //
+
+app.get('https://d-people-party.firebaseio.com/.json', function getCharacters(req,res){
+console.log(res);
+});
 
 
 
@@ -30,3 +30,7 @@ app.use(express.static(__dirname + '/public'));
 app.listen(process.env.PORT || 3000, function(){
 	console.log('Server starting on, ' + port);
 });
+
+
+
+
