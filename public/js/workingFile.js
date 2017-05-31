@@ -1,9 +1,62 @@
-var controlla;
+
 
 $(document).ready(function(){
 	var database = firebase.database();
 
 	
+
+
+
+
+
+
+function deleteCharacter(){
+		database.ref('/characters/').limitToLast(1).once('child_added', function(snapshot){
+		var objKey = snapshot.key;
+		let charToDelete = snapshot.val();
+		let charName = charToDelete.name;
+		var deleteObj = scene.getObjectByName(charName);
+		scene.remove(deleteObj);
+		var deleteText = scene.getObjectByName(charName + 'text');
+		scene.remove(deleteText);
+		console.log(objKey);
+		database.ref().child('/characters/' + objKey).remove();
+		// window.location.href = '../index.html';
+
+			
+
+
+	});
+	}
+	var controlla;
+
+	///////////////
+	// GUI MAKER //
+	///////////////
+	var gui = new dat.GUI();
+	var parameters = 
+	{
+		a: 200, //numeric
+		b: 200, //numeric slider
+		c: 'Hello, GUI', //string
+		d: false, // boolean (checkbox)
+		e: '#ff8800', //color(hex)
+		f: function() {deleteCharacter()},
+		g: function() {alert (parameters.c)},
+		v: 0, //dummy value, only type is impt
+		w: '...', // dummy value, only type is important
+		x: 0, y: 0, z: 0
+	};
+
+
+	gui.add(parameters, 'a').name('Number');
+	gui.add(parameters, 'b').min(128).max(256).step(16).name('Slider');
+	controlla = gui.add(parameters, 'c').name('String');
+	gui.add(parameters, 'f').name('Delete Me');
+
+
+
+
 
 //////////////////////////////
 // Seperate positioning for //
@@ -144,6 +197,7 @@ function checkCharacter(character, text, name) {
 	});
 
 
+
 ///////////////////////////
 // NON THREE JS FUNCTION //
 // DEFINITION SPACE ///////
@@ -219,7 +273,11 @@ function getMyCharacter(valueToChange){
 					new THREE.PlaneGeometry(
 						newCanvas.width,
 						newCanvas.height), newMaterial);
-
+				if(names.character == 'Rhino'){
+					newMesh.position.set(obj.position.x+100, obj.position.y+65, obj.position.z+100);
+				} else if(names.character == 'Rat'){
+					newMesh.position.set(obj.position.x+20, obj.position.y+30, obj.position.z);
+				}
 				newMesh.position.set(obj.position.x+100, obj.position.y+50, obj.position.z);
 				newMesh.name = objName;
 
@@ -240,11 +298,12 @@ function getMyCharacter(valueToChange){
 			// scene.remove(objToDelete2);
 			// checkCharacter(names.character, names.saying, names.name);
 
-		}
-	});
-}
+			}
+		});
+	} // << -- End of Update Function -- >>
 
 
+	
 
 
 
@@ -341,31 +400,7 @@ function init(){
 	scene.add(floor);
 
 
-	///////////////
-	// GUI MAKER //
-	///////////////
-	var gui = new dat.GUI();
-	var parameters = 
-	{
-		a: 200, //numeric
-		b: 200, //numeric slider
-		c: 'Hello, GUI', //string
-		d: false, // boolean (checkbox)
-		e: '#ff8800', //color(hex)
-		f: function() {alert('Hello!')},
-		g: function() {alert (parameters.c)},
-		v: 0, //dummy value, only type is impt
-		w: '...', // dummy value, only type is important
-		x: 0, y: 0, z: 0
-	};
-
-	// gui.add(parameters)
-
-	gui.add(parameters, 'a').name('Number');
-	gui.add(parameters, 'b').min(128).max(256).step(16).name('Slider');
-	controlla = gui.add(parameters, 'c').name('String');
-	gui.add(parameters, 'f').name('Say Hello');
-
+	
 
 
 
@@ -397,6 +432,8 @@ function init(){
 	theGoat = scene.getObjectByName('Goat');
 
 } // << --- end of init ---- >>
+
+
 
 
 
