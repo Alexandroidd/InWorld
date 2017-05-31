@@ -9,12 +9,12 @@ var name;
 var saying;
 
 
-
 function writeCharacter(name, character, saying) {
-  firebase.database().ref('characters/' + name).set({
+	var newPostKey = database.ref('/characters/').push().key;
+ 	firebase.database().ref('characters/' + newPostKey).set({
     name: name,
     character: character,
-    saying: saying
+    saying: saying,	
   });
 }
 

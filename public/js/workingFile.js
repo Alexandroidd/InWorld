@@ -1,6 +1,9 @@
+var controlla;
+
 $(document).ready(function(){
 	var database = firebase.database();
 
+	
 
 //////////////////////////////
 // Seperate positioning for //
@@ -33,16 +36,15 @@ $(document).ready(function(){
 
 
 // makes a goat
-function makeGoat(saying, character) {
+function makeGoat(saying, character, name) {
 	saying = saying;
 	character = character;
+	name = name;
 	var goatLoader = new THREE.OBJLoader();
-	
   	goatLoader.load('objs/goat.obj', function(object){
 	// var material = new THREE.MeshLambertMaterial({color:0xFF0000});
 	object.scale.y = object.scale.x = object.scale.z = 0.1;
-	object.name = 'Goat';
-	object.id = 2;
+	object.name = name;
 	
 	object.traverse( function ( child ) {
     if ( child instanceof THREE.Mesh )
@@ -52,20 +54,21 @@ function makeGoat(saying, character) {
 
 	});
 	scene.add(object);
-	makeText(saying, goatPosition, character);
+	makeText(saying, goatPosition, character, name);
 	goatPosition.z -= 50;
 	
   	});
  }
 
 // makes a rat
-function makeRat(saying, character) {
+function makeRat(saying, character, name) {
 	saying = saying;
 	character = character;
+	name = name;
 	var ratLoader = new THREE.OBJLoader();
 	ratLoader.load('objs/rat.obj', function(object){
 		object.scale.y = object.scale.x = object.scale.z = 1;
-		object.name = 'Rat';
+		object.name = name;
 
 		object.traverse(function (child){
 			if(child instanceof THREE.Mesh)
@@ -81,14 +84,15 @@ function makeRat(saying, character) {
 }
 
 // makes a rhino
-function makeRhino(saying, character) {
+function makeRhino(saying, character, name) {
 	saying = saying;
 	character = character;
+	name = name;
 	
 	var rhinoLoader = new THREE.OBJLoader();
 	rhinoLoader.load('objs/rhino.obj', function(object){
 		object.scale.y = object.scale.x = object.scale.z = 2;
-		object.name = 'Rhino';
+		object.name = name;
 
 		object.traverse(function(child){
 			if(child instanceof THREE.Mesh)
@@ -104,19 +108,19 @@ function makeRhino(saying, character) {
 
 
 // checks which character to make
-function checkCharacter(character, text) {
+function checkCharacter(character, text, name) {
 		  	character = character;
 		  	text = text;
-
+		  	name = name;
 		  	switch(character) {
 		  		case 'Goat':
-			  		makeGoat(text, character);
+			  		makeGoat(text, character, name);
 			  		break;
 			  	case 'Rat':
-			  		makeRat(text, character);
+			  		makeRat(text, character, name);
 			  		break;
 			  	case 'Rhino':
-			  		makeRhino(text, character);
+			  		makeRhino(text, character, name);
 			  		break;
 			  	default:
 			  		console.log('no animals to make');
@@ -126,36 +130,94 @@ function checkCharacter(character, text) {
 // End of Animal make/check functions ////////////
 
 
+//---------------------------------//
+/////////////////////////////////////
+///////  EDITING FUNCTIONS //////////
+/////////////////////////////////////
+/////////////////////////////////////
+
+	// changes any field to --> 'value'
+	controlla.onFinishChange(function(value){
+		value = value;
+		getMyCharacter(value);
+		console.log('The new Value is ' + value);
+	});
+
+
+///////////////////////////
+// NON THREE JS FUNCTION //
+// DEFINITION SPACE ///////
+///////////////////////////
+
+
+// this gets the curent character
+// that you're logged in with
+// its used to edit characters on the fly
+function getMyCharacter(valueToChange){
+	var lastItemKey;
+	var lastName;
+	valueToChange = valueToChange;
+	database.ref('/characters/').limitToLast(1).on('child_added', function(snapshot){
+		lastItemKey = snapshot.key;
+		lastItem = snapshot.val();
+		// console.log('last entered char was ' + lastItem.name);
+	});
+
+	firebase.database().ref('characters/' + lastItemKey).set({
+    character: lastItem.character,
+    name: lastItem.name,
+    saying: valueToChange
+  });
+}
+
+
+
 
 // gets player data from firebase to be used by functions //
 	function pullCharacters(){
-		var arr = [];
-		// this works
 		database.ref('/characters').orderByChild("character").on("child_added", function(snapshot) {
-		  // console.log(snapshot.val());
 		  var names = snapshot.val();
-		  checkCharacter(names.character, names.saying);
-		  
-		  console.log(names.character);   
-		  //<<<<---crucial use this!
-		  
+		  checkCharacter(names.character, names.saying, names.name);
+		  // console.log(names.name);   
 		});
-		
-		
+	}
 
 
+// looks for updates in any child nodes of 'characters'
+	function updateCharacters(){
+	var charName;
 
+	// console.log(scene.children);
+		database.ref('/characters').on('child_changed', function(snapshot){
+			var names = snapshot.val();
+			// console.log(names.name);
+			charName = names.name;
+			var objToDelete = scene.getObjectByName(charName);
+			scene.remove(objToDelete);
+			var objToDelete2 = scene.getObjectByName(charName + 'text');
+			scene.remove(objToDelete2);
+
+		});
 	}
 
 
 
+/////////////////////////////
+/// NON THREE JS FUNCTIONS///
+/////// RUN SPACE ///////////
+/////////////////////////////
 
-	// Functions to Run //
+
 	pullCharacters();
+	updateCharacters();
+	
 
 
 
-});
+}); // << -- END OF DOCU READY -- >> //
+
+
+
 
 //global
 var scene, camera, renderer, controls;
@@ -233,6 +295,39 @@ function init(){
 	scene.add(floor);
 
 
+	///////////////
+	// GUI MAKER //
+	///////////////
+	var gui = new dat.GUI();
+	var parameters = 
+	{
+		a: 200, //numeric
+		b: 200, //numeric slider
+		c: 'Hello, GUI', //string
+		d: false, // boolean (checkbox)
+		e: '#ff8800', //color(hex)
+		f: function() {alert('Hello!')},
+		g: function() {alert (parameters.c)},
+		v: 0, //dummy value, only type is impt
+		w: '...', // dummy value, only type is important
+		x: 0, y: 0, z: 0
+	};
+
+	// gui.add(parameters)
+
+	gui.add(parameters, 'a').name('Number');
+	gui.add(parameters, 'b').min(128).max(256).step(16).name('Slider');
+	controlla = gui.add(parameters, 'c').name('String');
+	gui.add(parameters, 'f').name('Say Hello');
+
+
+
+
+
+
+
+
+
 	// Goat Object
 	var theGoat;
 
@@ -254,7 +349,18 @@ function init(){
 	});
 
 	theGoat = scene.getObjectByName('Goat');
+
 } // << --- end of init ---- >>
+
+
+
+
+
+
+
+
+
+
 
 
 	// console.log(theGoat);
@@ -269,10 +375,11 @@ function init(){
 
 
 	// add text
-	function makeText(text, posit, character){
+	function makeText(text, posit, character, name){
 	character = character;
 	text = text;
 	posit = posit;
+	name = name;
 	var canvas1 = document.createElement('canvas');
 	var context1 = canvas1.getContext('2d');
 
@@ -295,15 +402,19 @@ function init(){
 		new THREE.PlaneGeometry(
 			canvas1.width,
 			canvas1.height), material1);
+
+
+		mesh1.name = name + 'text';
 	if (character == 'Goat'){
 		mesh1.position.set(posit.x+100,posit.y+50,posit.z);
 	} else if (character == 'Rhino'){
-		console.log('I am a ' + character);
-		mesh1.position.set(posit.x, posit.y+65, posit.z+100);
+		mesh1.position.set(posit.x+100, posit.y+65, posit.z+100);
 	} else if (character == 'Rat'){
 		mesh1.position.set(posit.x+20, posit.y+30, posit.z);
 	}
 	scene.add(mesh1);
+
+
 }
 
 
