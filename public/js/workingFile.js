@@ -33,7 +33,7 @@ $(document).ready(function(){
 	};
 
 
-	gui.add('Control Your Player');
+	gui.add(parameters, 'a');
 	controlla = gui.add(parameters, 'c').name('String');
 	gui.add(parameters, 'f').name('Delete Me');
 
