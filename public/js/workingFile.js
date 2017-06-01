@@ -372,7 +372,7 @@ function init(){
 	var loader = new THREE.TextureLoader();
 	var floorTexture = loader.load('images/checkerboard.jpg', function(texture){
 		floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping;
-		floorTexture.repeat.set(10,10);
+		floorTexture.repeat.set(35,35);
 	});
 	
 	var floorMaterial = new THREE.MeshBasicMaterial({map: floorTexture, side: THREE.DoubleSide});
