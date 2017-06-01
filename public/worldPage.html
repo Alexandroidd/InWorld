@@ -20,6 +20,7 @@
 		<script src='js/supporting/StereoEffect.js'></script>
 		<script src='js/supporting/Detector.js'></script>
 		<script src='js/supporting/OrbitControls.js'></script>
+		<script src='js.supporting/threex.keyboardstate.js'></script>
 		<script type='text/javascript' src='js/dat.gui.min.js'></script>
 		<script src='js/workingFile.js'>
 			// Our Javascript will go here.
@@ -38,7 +39,7 @@
 <script>
   // Initialize Firebase
   var config = {
-    apiKey: "AIzaSyBXlW_OcuWYsvQLHHYhYAs6ofEGHAFNRFU",
+    apiKey: PROCESS.ENV.apiKey ,
     authDomain: "d-people-party.firebaseapp.com",
     databaseURL: "https://d-people-party.firebaseio.com",
     projectId: "d-people-party",

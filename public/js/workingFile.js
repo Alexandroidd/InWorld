@@ -91,7 +91,7 @@ function makeGoat(saying, character, name) {
 	});
 	scene.add(object);
 	makeText(saying, goatPosition, character, name);
-	goatPosition.z -= 50;
+	goatPosition.z -= 150;
 	
   	});
  }
@@ -115,7 +115,7 @@ function makeRat(saying, character, name) {
 		
 		scene.add(object);
 		makeText(saying, ratPosition, character, name);
-		ratPosition.x -= 50;
+		ratPosition.x -= 150;
 	});
 }
 
@@ -138,7 +138,7 @@ function makeRhino(saying, character, name) {
 		});
 		scene.add(object);
 		makeText(saying, rhinoPosition, character, name);
-		rhinoPosition.z += 50;
+		rhinoPosition.z += 120;
 	});
 }
 
@@ -376,68 +376,16 @@ function init(){
 	});
 	
 	var floorMaterial = new THREE.MeshBasicMaterial({map: floorTexture, side: THREE.DoubleSide});
-	var floorGeometry = new THREE.PlaneGeometry(1000,1000,1,1);
+	var floorGeometry = new THREE.PlaneGeometry(8000,8000,1,1);
 	var floor = new THREE.Mesh(floorGeometry, floorMaterial);
 	floor.position.y = -0.5;
 	floor.rotation.x = Math.PI / 2;
 	scene.add(floor);
 
 
-	
-
-
-
-
-
-
-
-
-	// Goat Object
-	var theGoat;
-
-	var objLoader = new THREE.OBJLoader();
-	objLoader.load('objs/goat.obj', function(object){
-		// var material = new THREE.MeshLambertMaterial({color:0xFF0000});
-		object.scale.y = object.scale.x = object.scale.z = 0.1;
-		object.name = 'Goat';
-		object.id = 2;
-		object.traverse( function ( child ) {
-        if ( child instanceof THREE.Mesh )
-            child.material.color.setRGB (1, 0, 0);
-        	
-      
-    });
-		
-		scene.add(object);
-		
-	});
-
-	theGoat = scene.getObjectByName('Goat');
-
 } // << --- end of init ---- >>
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-	// console.log(theGoat);
-	
-
-	// var lastIndex = scene.children.length-1;
-	// theGoat = scene.children[3];
-	// theGoat.name = 'goatman';
-	// theGoat.material.color.setRGB(0,1,0);
-
-	// console.log(theGoat.name);
 
 
 	// add text
@@ -546,6 +494,31 @@ function init(){
 		// });
 		// position = ()
 
+
+
+
+
+// Goat Object
+	// var theGoat;
+
+	// var objLoader = new THREE.OBJLoader();
+	// objLoader.load('objs/goat.obj', function(object){
+	// 	// var material = new THREE.MeshLambertMaterial({color:0xFF0000});
+	// 	object.scale.y = object.scale.x = object.scale.z = 0.1;
+	// 	object.name = 'Goat';
+	// 	object.id = 2;
+	// 	object.traverse( function ( child ) {
+ //        if ( child instanceof THREE.Mesh )
+ //            child.material.color.setRGB (1, 0, 0);
+        	
+      
+ //    });
+		
+	// 	scene.add(object);
+		
+	// });
+
+	// theGoat = scene.getObjectByName('Goat');
 
 
 
