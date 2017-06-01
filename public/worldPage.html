@@ -38,8 +38,11 @@
 
 <script>
   // Initialize Firebase
+var myKey = process.env.API_KEY;
+
+
   var config = {
-    apiKey: process.env.API_KEY,
+    apiKey: myKey,
     authDomain: "d-people-party.firebaseapp.com",
     databaseURL: "https://d-people-party.firebaseio.com",
     projectId: "d-people-party",
