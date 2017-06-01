@@ -5,6 +5,7 @@ const bodyParser		= require('body-parser');
 const app					= express();
 const router				= express.Router();
 const port					= process.env.PORT || 3000;
+const request				= require('request');
 
 
 
@@ -17,11 +18,25 @@ app.use(bodyParser.json());
 app.use(express.static(__dirname + '/public'));
 
 
-//INDEX ROUTE //
 
-app.get('https://d-people-party.firebaseio.com/.json', function getCharacters(req,res){
-console.log(res);
+// drone info
+app.get('/drones', function getDrones(req, res){
+	let url = 'http://api.dronestre.am/data/';
+	request (url, function(error, response, body){
+		var parseBody = JSON.parse(body);
+		var first = parseBody.strike[0].narrative;
+		var second = parseBody.strike[1].narrative;
+		var th = parseBody.strike[2].narrative;
+		var four = parseBody.strike[3].narrative;
+		var fifth = parseBody.strike[4].narrative;
+		var sixth = parseBody.strike[5].narrative;
+		res.json([first, second, th, four, fifth, sixth]);
+	});
 });
+// amazing...this worked. fucking christ
+
+
+
 
 
 

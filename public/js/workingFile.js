@@ -453,6 +453,101 @@ function init(){
 
 
 
+////////////////////////////
+// Drone Strike API Calls //
+////////////////////////////
+var droneInfo;
+
+$.ajax({
+	url: '/drones',
+	type: 'GET',
+	success: function(data){
+		console.log(data[1]);
+		makeEvilRhino(data[0],data[1],data[2],data[3],data[4],data[5]);
+
+	},
+	error: function(error){
+		alert('error: ' + error);
+	}
+});
+
+
+var evilRhinoPosition = new THREE.Vector3();
+		evilRhinoPosition.x = 0;
+		evilRhinoPosition.y = 10;
+		evilRhinoPosition.z = -100;
+
+
+function makeEvilRhino(droneInfo, moreDroneInfo, t, f, ff, sx) {
+	droneInfo = droneInfo;
+	moreDroneInfo = moreDroneInfo;
+	t = t;
+	f = f;
+	ff = ff;
+	sx = sx;
+	
+	var evilRhinoLoader = new THREE.OBJLoader();
+	evilRhinoLoader.load('objs/rhino.obj', function(object){
+		object.scale.y = object.scale.x = object.scale.z = 20;
+		object.name = 'evilRhino';
+
+		object.traverse(function(child){
+			if(child instanceof THREE.Mesh)
+				child.material.color.setRGB(0,0,0);
+				child.position.set(evilRhinoPosition.x, evilRhinoPosition.y, evilRhinoPosition.z);
+				
+		});
+		scene.add(object);
+		makeEvilText(droneInfo);
+		makeEvilText(moreDroneInfo);
+		makeEvilText(t);
+		makeEvilText(f);
+		makeEvilText(ff);
+		makeEvilText(sx);
+	});
+}
+
+
+var evilRhinoTextPosition = new THREE.Vector3();
+		evilRhinoTextPosition.x = 0;
+		evilRhinoTextPosition.y = 1000;
+		evilRhinoTextPosition.z = -3500;
+
+
+function makeEvilText(droneInfo){
+	droneInfo = droneInfo;
+	var evilCanvas = document.createElement('canvas');
+	evilCanvas.width = 7200;
+	evilCanvas.height = 1000;
+	var evilContext = evilCanvas.getContext('2d');
+
+	evilContext.font = 'Bold 200px Arial';
+
+	evilContext.fillStyle = 'rgba(10,10,10,0.95';
+	evilContext.fillText(droneInfo, 0, 200);
+
+	//canvas contents used as a texture
+	var evilTexture = new THREE.Texture(evilCanvas);
+	evilTexture.needsUpdate = true;
+
+	var evilMaterial = new THREE.MeshBasicMaterial(
+		{map: evilTexture, side: THREE.DoubleSide});
+	evilMaterial.transparent = true;
+
+	var evilMesh = new THREE.Mesh(
+		new THREE.PlaneGeometry(
+			evilCanvas.width,
+			evilCanvas.height), evilMaterial);
+
+
+	
+	evilMesh.position.set(evilRhinoTextPosition.x, evilRhinoTextPosition.y, evilRhinoTextPosition.z);
+		
+
+	evilMesh.name = 'evilRhinoText';
+	scene.add(evilMesh);
+	evilRhinoTextPosition.y+=200;
+}
 
 
 
@@ -461,17 +556,7 @@ function init(){
 
 
 
-// $.ajax({
-// 	url: 'https://d-people-party.firebaseio.com/.json',
-// 	type: 'POST',
-// 	data: JSON.stringify(param),
-// 	success: function(){
-// 		alert('success');
-// 	},
-// 	error: function(error){
-// 		alert('error: ' + error);
-// 	}
-// });
+
 
 
 
