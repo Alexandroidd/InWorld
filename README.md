@@ -1,15 +1,6 @@
 # ProjectFour-3d-Peoplez
 
 
-A readme.md file with:
-An embedded screenshot of the app
-Explanations of the technologies used
-A couple paragraphs about the general approach you took
-Installation instructions for any dependencies
-Link to your user stories – who are your users, what do they want, and why?
-Link to your wireframes – sketches of major views / interfaces in your application
-Descriptions of any unsolved problems or major hurdles you had to overcome
-
 
 ![](https://preview.ibb.co/mKcCdF/Screen_Shot_2017_06_02_at_9_21_21_AM.png)
 ![](https://preview.ibb.co/f0mikv/Screen_Shot_2017_06_02_at_9_20_22_AM.png)
