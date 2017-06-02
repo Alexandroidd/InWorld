@@ -11,7 +11,7 @@ Link to your wireframes – sketches of major views / interfaces in your applica
 Descriptions of any unsolved problems or major hurdles you had to overcome
 
 
-![](https://ibb.co/km2dJF)
+![](https://preview.ibb.co/mKcCdF/Screen_Shot_2017_06_02_at_9_21_21_AM.png)
 ![](https://ibb.co/k8PEsa)
 
 
