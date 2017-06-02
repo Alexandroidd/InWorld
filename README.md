@@ -11,8 +11,8 @@ Link to your wireframes – sketches of major views / interfaces in your applica
 Descriptions of any unsolved problems or major hurdles you had to overcome
 
 
-https://ibb.co/km2dJF
-https://ibb.co/k8PEsa
+![](https://ibb.co/km2dJF)
+![](https://ibb.co/k8PEsa)
 
 
 
@@ -44,7 +44,7 @@ User Stories:
 -User can Delete their Avatar + saying
 -User can see other members avatars and sayings updated in real-time
 
-https://ibb.co/cfYzsa
+![](https://ibb.co/cfYzsa)
 
 
 Unsolved: Trying to figure out how to pair avatar objects and their related text objects together so I dont' have to spawn
