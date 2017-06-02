@@ -12,7 +12,7 @@ Descriptions of any unsolved problems or major hurdles you had to overcome
 
 
 ![](https://preview.ibb.co/mKcCdF/Screen_Shot_2017_06_02_at_9_21_21_AM.png)
-![](https://ibb.co/k8PEsa)
+![](https://preview.ibb.co/f0mikv/Screen_Shot_2017_06_02_at_9_20_22_AM.png)
 
 
 
@@ -44,7 +44,7 @@ User Stories:
 -User can Delete their Avatar + saying
 -User can see other members avatars and sayings updated in real-time
 
-![](https://ibb.co/cfYzsa)
+![](https://image.ibb.co/dTZTkv/Wireframe_Proj4_01.png)
 
 
 Unsolved: Trying to figure out how to pair avatar objects and their related text objects together so I dont' have to spawn
